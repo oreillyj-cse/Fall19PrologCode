@@ -112,6 +112,7 @@ concat([H|T],B,[H|TB]):-concat(T,B,TB).
 rev([],[]).
 rev([H|T], R ) :- rev(T,RT), append(RT,[H],R).
 
+palindrome(A) :- reverse(A,A).
 
 % rev2 (library, example of accumulator pattern, also define helper rule
 % (always okay)
@@ -123,22 +124,38 @@ subset([],[]).
 subset([H|Sub],[H|Rest]):-subset(Sub,Rest).
 subset(Sub,[_|Rest]):-subset(Sub,Rest).
 
+intersect(A,B):-member(M,A),member(M,B).
+
+
+intersect2([H|_],L):-member(H,L).
+intersect2([_|T],L):-intersect2(T,L).
 %call following line:
 % set_prolog_flag(answer_write_options,[max_depth(0)]).
 
 
+disjoint(A,B) :- \+intersect(A,B).
+
+disjoint2(A,B) :- \+ (member(M,A),member(M,B)).
+
 %take
 % take(2,[1,2,3,4], [1,2] ).
-take(0,L,[]).
-take(N,[H|T], L):-Nm1 is N-1, take(Nm1,T,TT),append([H],TT,L).
+take(0,_,[]).
+take(N,[H|T], L) :-Nm1 is N-1, take(Nm1,T,TT),append([H],TT,L).
 
 % take(N,[H|T],[H|S]):-take(N-1,T,S). %watch out for this... doesn't
 % evaluate expression (and does not unify...)
 
 
 %drop
+drop(0,L,L).
+drop(N,[_|T],L) :- Nm1 is N-1, drop(Nm1,T,L).
 
 % split less efficient with take and drop
+split(AB,A,B) :-length(AB,L),Half is L//2,take(Half,AB,A),drop(Half,AB,B).
+
+splitAtN(AB,0,[],AB).
+splitAtN([H|T] ,N,[H|Am1],B) :- Nm1 is N-1, splitAtN(T,Nm1,Am1,B).
+
 
 % more efficient version (take, in particular, computes and then
 % discards the drop answer).
@@ -148,5 +165,9 @@ take(N,[H|T], L):-Nm1 is N-1, take(Nm1,T,TT),append([H],TT,L).
 
 
 %merge_lists
+merge_lists([],L,L).
+merge_lists(L,[],L).
+merge_lists([G|S],[H|T], [G| MRest] ) :- G=<H, merge_lists(S,[H|T],MRest).
+merge_lists([G|S],[H|T], [H| MRest] ) :- G>H, merge_lists([G|S],T,MRest).
 
 %what happens if I do <, >= (sort NOT stable - 350)
