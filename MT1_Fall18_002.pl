@@ -13,7 +13,11 @@ colorN(yellow). colorN(straw). colorN(brown).
 colorBrussels(blue).
 colorS(red). colorS(magenta). colorS(green). 
 
-%colorBelgium(WF,OF,A,Lim,FB,B,H,WB,N,Lut,Lux):-
-%    colorN(WF),colorN(OF),colorN(A),colorN(Lim),colorN(FB),
-%     \+ WF=OF , \+ OF=A , \+ OF=FB ,\+ A=FB , \+ Lim=A , \+ Lim=FB 
+colorBelgium(WF,OF,A,Lim,FB,B,H,WB,N,Lut,Lux):-
+    colorN(WF),colorN(OF),colorN(A),colorN(Lim),colorN(FB),
+     \+ WF=OF , \+ OF=A , \+ OF=FB ,\+ A=FB , \+ Lim=A , \+ Lim=FB,
+    colorBrussels(B),  
+    colorS(H),colorS(WB),colorS(N),colorS(Lut),colorS(Lux),
+    \+ H=WB , \+ H=N , \+ WB=N , \+ WB=Lut , \+ N=Lut, \+ Lut=Lux, \+ N= Lux .
+
 % then do southern region
