@@ -171,3 +171,11 @@ merge_lists([G|S],[H|T], [G| MRest] ) :- G=<H, merge_lists(S,[H|T],MRest).
 merge_lists([G|S],[H|T], [H| MRest] ) :- G>H, merge_lists([G|S],T,MRest).
 
 %what happens if I do <, >= (sort NOT stable - 350)
+
+merge_sort([],[]).
+merge_sort([X],[X]).
+merge_sort(L,S) :- length(L,Len),Len>1,
+    split(L,LL,RL),
+    merge_sort(LL,LLS),
+    merge_sort(RL,RLS),
+    merge_lists(LLS,RLS,S).
