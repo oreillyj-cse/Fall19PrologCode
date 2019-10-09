@@ -20,3 +20,15 @@ parent(P,C) :- node(P,C,_).
 
 descendant(D,A) :- parent(A,D),\+D=nil.
 descendant(D,A) :- parent(P,D), descendant(P,A), \+D=nil.
+
+flatten1([],[]).
+flatten1( [H|T], HFT ) :- flatten1(T,FT), append(H,FT, HFT).
+
+flattenAll([],[]).
+flattenAll( [H|T], Flat ) :- is_list(H), 
+    flattenAll(H,FH),
+    flattenAll(T,FT), 
+    append(FH,FT, Flat).
+flattenAll( [H|T], [H|FT] ) :- \+ is_list(H), 
+    flattenAll(T,FT).
+  %  append([H],FT, Flat).    

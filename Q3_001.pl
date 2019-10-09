@@ -13,7 +13,7 @@ no_incoming(V) :- edge(V,_), \+ edge(_,V).
 
 cycle3(V1,V2,V3) :- edge(V1,V2),edge(V2,V3),edge(V3,V1).
 
-
+%note, I threw this question because (almost) everyone forgot mod/2
 is_power_of(1,_).
 is_power_of(N,B):- 
     N > 1,
